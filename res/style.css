@@ -1,0 +1,7 @@
+flow.box {
+    padding: 20 0 0 20;
+    background: #400;
+}
+flow.box > * {
+    margin-bottom: 5;
+}
