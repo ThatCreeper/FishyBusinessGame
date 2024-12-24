@@ -2,32 +2,47 @@ package src;
 
 // Vaguely based on the dnLibs api
 class Cooldown {
-    var map: Map<String, Float>;
+    var smap: Map<String, Float>;
+    var fmap: Map<String, Float>;
     
     public function new() {
-        map = new Map();
+        smap = new Map();
+        fmap = new Map();
     }
 
     public function setS(cd: String, s: Float) {
-        map.set(cd, s);
+        if (remDurS(cd) >= s)
+            return;
+        smap.set(cd, s);
     }
 
     public function setF(cd: String, f: Float) {
-        setS(cd, f / Main.FPS);
+        if (remDurF(cd) >= f)
+            return;
+        fmap.set(cd, f);
     }
 
-    public function update(dt: Float) {
-        for (x in map.keyValueIterator()) {
-            var n = x.value -= dt * Main.GameSpeed;
+    public function update(dt: Float, speed: Float, skipFrame = false) {
+        for (x in smap.keyValueIterator()) {
+            var n = x.value - dt;
             if (n <= 0)
-                map.remove(x.key);
+                smap.remove(x.key);
             else
-                map.set(x.key, n);
+                smap.set(x.key, n);
+        }
+        if (skipFrame)
+            return;
+        for (x in fmap.keyValueIterator()) {
+            var n = x.value - speed;
+            if (n <= 0)
+                fmap.remove(x.key);
+            else
+                fmap.set(x.key, n);
         }
     }
 
     public function has(cd: String) {
-        return map.exists(cd);
+        return smap.exists(cd) || fmap.exists(cd);
     }
 
     public function hasSetF(cd: String, f: Float) {
@@ -42,5 +57,27 @@ class Cooldown {
             return true;
         setS(cd, s);
         return false;
+    }
+
+    public function remDurS(cd: String) {
+        var v;
+        v = smap.get(cd);
+        if (v != null)
+            return v;
+        v = fmap.get(cd);
+        if (v != null)
+            return v / Main.FPS;
+        return 0;
+    }
+
+    public function remDurF(cd: String) {
+        var v;
+        v = fmap.get(cd);
+        if (v != null)
+            return v;
+        v = smap.get(cd);
+        if (v != null)
+            return v * Main.FPS;
+        return 0;
     }
 }
