@@ -1,4 +1,4 @@
-package src;
+package game;
 
 import h2d.Tile;
 import h2d.domkit.Style;

@@ -1,4 +1,4 @@
-package src;
+package game;
 
 class Game extends TimeAware {
     public var entities: List<Entity>;
@@ -6,6 +6,7 @@ class Game extends TimeAware {
     public var bgLayer: h2d.Object;
     public var gameLayer: h2d.Object;
     public var s2d: h2d.Scene;
+    public var camera: Camera;
 
     public function new() {
         initLayers();
@@ -35,6 +36,7 @@ class Game extends TimeAware {
     public function postUpdate() {
         for (e in entities)
             e.postUpdate();
+        camera.update(s2d);
     }
 
     public function tick() {
@@ -52,7 +54,11 @@ class Game extends TimeAware {
         e.dispose();
     }
 
-    public function addEntity(e) {
+    public function addEntity(e: Entity) {
         entities.add(e);
+    }
+
+    public function shake(s) {
+        cd.setS("shake", s);
     }
 }

@@ -1,4 +1,4 @@
-package src;
+package game;
 
 // Vaguely based on the dnLibs api
 class Cooldown {

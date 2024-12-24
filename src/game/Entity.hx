@@ -1,4 +1,4 @@
-package src;
+package game;
 
 import h2d.Object;
 
@@ -7,6 +7,11 @@ class Entity extends TimeAware {
     public var spr: Object;
     public var x: Float;
     public var y: Float;
+
+    public var camera(get, never): Camera;
+        function get_camera() {
+            return game.camera;
+        }
     
     public function new(?g: Game, ?layer) {
         if (g == null)

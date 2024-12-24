@@ -3,5 +3,5 @@
 -lib hlsdl
 -lib domkit
 -hl fb.hl
--main src.Main
+-main game.Main
 -debug

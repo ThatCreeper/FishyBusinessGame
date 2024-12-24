@@ -1,8 +1,6 @@
-package src;
+package game;
 
 import hxd.Timer;
-import src.Main;
-import src.Cooldown;
 
 class TimeAware {
     public var tmod(get, never): Float;

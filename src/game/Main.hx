@@ -1,12 +1,7 @@
-package src;
+package game;
 
-import src.Game;
-import titlescreen.TitleScreenGame;
 import h2d.Scene;
-import hxd.Key;
-import h2d.Layers;
-import h2d.domkit.Style;
-import h2d.Tile;
+import game.titlescreen.TitleScreenGame;
 
 class Main extends hxd.App {
     public static var FPS: Float = 60;
