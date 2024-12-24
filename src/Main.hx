@@ -1,41 +1,43 @@
 package src;
 
+import h2d.Layers;
 import h2d.domkit.Style;
 import h2d.Tile;
-
-class SampleView extends h2d.Flow implements h2d.domkit.Object {
-    static var SRC =
-        <sample-view class="box" layout="vertical">
-            <text text={"Hello World!"}/>
-            <bitmap src={tile} public id="mybmp"/>
-        </sample-view>
-
-    public function new(tile:h2d.Tile,?parent) {
-        super(parent);
-        initComponent();
-    }
-}
 
 class Main extends hxd.App {
     public static var FPS: Float = 60;
     public static var GameSpeed: Float = 1;
 
-    var cd: Cooldown;
+    public var cd: Cooldown;
+    public var hud: Hud;
     var tf: h2d.Text;
-    var style: Style;
+    public var hudLayer: h2d.Object;
+    public var bgLayer: h2d.Object;
+    public var gameLayer: h2d.Object;
 
     override function init() {
         hxd.Res.initLocal();
         hxd.res.Resource.LIVE_UPDATE = true;
-        style = new Style();
-        style.load(hxd.Res.style);
+
         cd = new Cooldown();
-        tf = new h2d.Text(hxd.res.DefaultFont.get(), s2d);
+        
+        initLayers();
+        
+        tf = new h2d.Text(hxd.res.DefaultFont.get(), gameLayer);
         tf.text = "Hello World!";
-        var view = new SampleView(Tile.fromColor(0xFF0000, 32, 32), s2d);
-        view.mybmp.alpha = 0.8;
-        style.addObject(view);
         cd.setS("down", 3);
+
+        hud = new Hud(hudLayer);
+        
+    }
+
+    function initLayers() {
+        hudLayer = new h2d.Object();
+        bgLayer = new h2d.Object();
+        gameLayer = new h2d.Object();
+        s2d.add(bgLayer, 0);
+        s2d.add(gameLayer, 1);
+        s2d.add(hudLayer, 2);
     }
 
     override function update(dt:Float) {
@@ -48,6 +50,7 @@ class Main extends hxd.App {
     }
 
     override function dispose() {
+        hud.dispose();
         super.dispose();
     }
 
