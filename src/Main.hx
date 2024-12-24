@@ -1,5 +1,7 @@
 package src;
 
+import src.Game;
+import titlescreen.TitleScreenGame;
 import h2d.Scene;
 import hxd.Key;
 import h2d.Layers;
@@ -24,7 +26,6 @@ class Main extends hxd.App {
 
     public var ucd: Cooldown;
     public var game: Game;
-    var tf: h2d.Text;
 
     var timeSinceTick = 0.0;
 
@@ -37,7 +38,7 @@ class Main extends hxd.App {
 
         ucd = new Cooldown();
         
-        setGame(new Game());
+        setGame(new TitleScreenGame());
     }
 
     public static function newScene(): Scene {
@@ -61,18 +62,16 @@ class Main extends hxd.App {
 
         GameSpeed = ucd.has('frozen') ? 0.1 : UserGameSpeed;
 
-        if (Key.isPressed(Key.A))
-            freezeFrame();
+        game.preUpdate();
+        game.update();
 
         timeSinceTick += dt * GameSpeed;
         while (timeSinceTick >= 1 / TickRate) {
             timeSinceTick -= 1 / TickRate;
+            game.tick();
         }
 
-        // Render
-        if (GameSpeed > 0.1)
-            tf.text = 'FPS: $FPS';
-        tf.y = ucd.has("down") ? 100 : 0;
+        game.postUpdate();
     }
 
     override function dispose() {

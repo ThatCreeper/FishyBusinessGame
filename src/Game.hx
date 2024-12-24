@@ -37,6 +37,11 @@ class Game extends TimeAware {
             e.postUpdate();
     }
 
+    public function tick() {
+        for (e in entities)
+            e.tick();
+    }
+
     public function dispose() {
         for (e in entities)
             e.dispose();

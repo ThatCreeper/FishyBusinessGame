@@ -1,15 +1,20 @@
 package src;
 
+import h2d.Object;
+
 class Entity extends TimeAware {
-    public var game(get, never): Game;
-        function get_game() {
-            return Main.INST.game;
-        }
+    public var game: Game;
+    public var spr: Object;
+    public var x: Float;
+    public var y: Float;
     
-    public function new(?g: Game) {
+    public function new(?g: Game, ?layer) {
         if (g == null)
-            g = game;
-        g.addEntity(this);
+            g = Main.INST.game;
+        game = g;
+        game.addEntity(this);
+
+        spr = new Object(layer ?? game.gameLayer);
     }
 
     public function preUpdate() {
@@ -21,6 +26,11 @@ class Entity extends TimeAware {
     }
 
     public function postUpdate() {
+        spr.x = x;
+        spr.y = y;
+    }
+
+    public function tick() {
 
     }
 
