@@ -1,5 +1,6 @@
 package src;
 
+import h2d.Scene;
 import hxd.Key;
 import h2d.Layers;
 import h2d.domkit.Style;
@@ -19,40 +20,35 @@ class Main extends hxd.App {
         return 60 / FPS;
     }
 
+    public static var INST: Main;
+
     public var ucd: Cooldown;
-    public var hud: Hud;
+    public var game: Game;
     var tf: h2d.Text;
-    public var hudLayer: h2d.Object;
-    public var bgLayer: h2d.Object;
-    public var gameLayer: h2d.Object;
-    var FRAMES = 0;
 
     var timeSinceTick = 0.0;
 
     override function init() {
+        INST = this;
         hxd.Res.initLocal();
+        #if debug
         hxd.res.Resource.LIVE_UPDATE = true;
+        #end
 
         ucd = new Cooldown();
         
-        initLayers();
-        
-        tf = new h2d.Text(hxd.res.DefaultFont.get(), gameLayer);
-        tf.text = "Hello World!";
-        // ucd.setS("down", 3);
-
-        hud = new Hud(hudLayer);
-        
+        setGame(new Game());
     }
 
-    function initLayers() {
-        setScene2D(new h2d.Scene());
-        hudLayer = new h2d.Object();
-        bgLayer = new h2d.Object();
-        gameLayer = new h2d.Object();
-        s2d.add(bgLayer, 0);
-        s2d.add(gameLayer, 1);
-        s2d.add(hudLayer, 2);
+    public static function newScene(): Scene {
+        var s = new Scene();
+        Main.INST.setScene2D(s);
+        return s;
+    }
+
+    public static function setGame(game) {
+        INST.game?.dispose();
+        INST.game = game;
     }
 
     public function freezeFrame() {
@@ -65,9 +61,6 @@ class Main extends hxd.App {
 
         GameSpeed = ucd.has('frozen') ? 0.1 : UserGameSpeed;
 
-        if (ucd.has('frozen'))
-            FRAMES++;
-
         if (Key.isPressed(Key.A))
             freezeFrame();
 
@@ -78,12 +71,12 @@ class Main extends hxd.App {
 
         // Render
         if (GameSpeed > 0.1)
-            tf.text = 'FPS: $FPS Frames: $FRAMES';
+            tf.text = 'FPS: $FPS';
         tf.y = ucd.has("down") ? 100 : 0;
     }
 
     override function dispose() {
-        hud.dispose();
+        game.dispose();
         super.dispose();
     }
 
