@@ -3,7 +3,7 @@ package game;
 class Camera {
     public var x: Float = 0;
     public var y: Float = 0;
-    public var scale: Float = 0;
+    public var scale: Float = 1;
 
     public function new() {
         

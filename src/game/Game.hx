@@ -38,7 +38,7 @@ class Game extends TimeAware {
     public function postUpdate() {
         for (e in entities)
             e.postUpdate();
-        camera.update(s2d, cd.has("shake"));
+        camera.update(s2d, Main.GameSpeed > 0.1 && cd.has("shake"));
     }
 
     public function tick() {
