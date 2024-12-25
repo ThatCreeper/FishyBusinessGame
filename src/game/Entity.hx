@@ -38,6 +38,11 @@ class Entity extends TimeAware {
         spr.scaleX = scale;
         spr.scaleY = scale;
         spr.rotation = rotation;
+
+        if (cd.has("shake")) {
+            spr.x += (Math.random() - 0.5) * 2 * 2 / scale;
+            spr.y += (Math.random() - 0.5) * 2 * 2 / scale;
+        }
     }
 
     public function tick() {
@@ -49,6 +54,10 @@ class Entity extends TimeAware {
     }
 
     public function dispose() {
+        spr.remove();
+    }
 
+    public function shake(s) {
+        cd.setS("shake", s);
     }
 }
