@@ -14,5 +14,6 @@ class PlayButtonEntity extends Entity {
         var i = new Interactive(128, 32, g);
         i.onOver = x -> g.alpha = 0.8;
         i.onOut = x -> g.alpha = 1;
+        i.onClick = x -> game.shake(0.2);
     }
 }

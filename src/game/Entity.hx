@@ -23,7 +23,7 @@ class Entity extends TimeAware {
     }
 
     public function preUpdate() {
-
+        updateCooldowns();
     }
 
     public function update() {

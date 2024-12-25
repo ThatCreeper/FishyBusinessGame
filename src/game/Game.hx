@@ -11,6 +11,7 @@ class Game extends TimeAware {
     public function new() {
         initLayers();
         entities = new List();
+        camera = new Camera();
     }
 
     function initLayers() {
@@ -24,6 +25,7 @@ class Game extends TimeAware {
     }
     
     public function preUpdate() {
+        updateCooldowns();
         for (e in entities)
             e.preUpdate();
     }
@@ -36,7 +38,7 @@ class Game extends TimeAware {
     public function postUpdate() {
         for (e in entities)
             e.postUpdate();
-        camera.update(s2d);
+        camera.update(s2d, cd.has("shake"));
     }
 
     public function tick() {
