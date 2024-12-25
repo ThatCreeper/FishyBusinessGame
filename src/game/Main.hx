@@ -25,6 +25,7 @@ class Main extends hxd.App {
     public var game: Game;
 
     var timeSinceTick = 0.0;
+    var newGameThisFrame = false;
 
     override function init() {
         INST = this;
@@ -41,6 +42,7 @@ class Main extends hxd.App {
         ucd = new Cooldown();
         
         setGame(new TitleScreenGame());
+        newGameThisFrame = false;
     }
 
     public static function newScene(): Scene {
@@ -52,6 +54,7 @@ class Main extends hxd.App {
     public static function setGame(game) {
         INST.game?.dispose();
         INST.game = game;
+        INST.newGameThisFrame = true;
     }
 
     public function freezeFrame() {
@@ -64,16 +67,19 @@ class Main extends hxd.App {
 
         GameSpeed = ucd.has('frozen') ? 0.1 : UserGameSpeed;
 
-        game.preUpdate();
-        game.update();
+        do {
+            newGameThisFrame = false;
+            game.preUpdate();
+            game.update();
 
-        timeSinceTick += dt * GameSpeed;
-        while (timeSinceTick >= 1 / TickRate) {
-            timeSinceTick -= 1 / TickRate;
-            game.tick();
-        }
+            timeSinceTick += dt * GameSpeed;
+            while (timeSinceTick >= 1 / TickRate) {
+                timeSinceTick -= 1 / TickRate;
+                game.tick();
+            }
 
-        game.postUpdate();
+            game.postUpdate();
+        } while(newGameThisFrame);
     }
 
     override function dispose() {
