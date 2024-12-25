@@ -5,8 +5,10 @@ import h2d.Object;
 class Entity extends TimeAware {
     public var game: Game;
     public var spr: Object;
-    public var x: Float;
-    public var y: Float;
+    public var x: Float = 0;
+    public var y: Float = 0;
+    public var scale: Float = 1;
+    public var rotation: Float = 0;
 
     public var camera(get, never): Camera;
         function get_camera() {
@@ -33,6 +35,9 @@ class Entity extends TimeAware {
     public function postUpdate() {
         spr.x = x;
         spr.y = y;
+        spr.scaleX = scale;
+        spr.scaleY = scale;
+        spr.rotation = rotation;
     }
 
     public function tick() {
