@@ -49,7 +49,7 @@ class BubblerEntity extends Entity {
             g.g.y -= g.s * tmod;
         }
         bg.alpha = time / 2 - 0.5;
-        if (bg.alpha >= 1) {
+        if (bg.alpha > 1) {
             onFinished();
         }
     }

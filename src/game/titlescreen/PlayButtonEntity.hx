@@ -1,5 +1,6 @@
 package game.titlescreen;
 
+import hxd.Pad;
 import hxd.Timer;
 import h2d.Object;
 import h2d.Text;
@@ -11,16 +12,20 @@ import h2d.Tile;
 import h2d.Bitmap;
 
 class PlayButtonEntity extends Entity {
+    public var tsgame: TitleScreenGame;
     var camscale = 1.0;
     var time = 0.0;
+    var active = false;
+    var i: Interactive;
 
     public function new(?g) {
+        tsgame = g;
         super(g);
         var c = new Object(spr);
         var g = new Bitmap(Tile.fromColor(0xFFFFFF, 128, 32), c);
         g.x = -64;
         g.y = -16;
-        var i = new Interactive(128, 32, g);
+        i = new Interactive(128, 32, g);
         i.onOver = x -> {
             g.alpha = 0.8;
             camscale = 1.5;
@@ -31,8 +36,10 @@ class PlayButtonEntity extends Entity {
             camscale = 1;
         }
         i.onClick = x -> {
-            game.shake(10);
-            new BubblerEntity();
+            if (active)
+                return;
+            active = true;
+            tsgame.bubble();
         }
         var t = new Text(DefaultFont.get(), c);
         t.text = "Play Game";
@@ -48,5 +55,8 @@ class PlayButtonEntity extends Entity {
 
         scale = M.lerp(scale, camscale, 0.2 * tmod);
         rotation = (scale - 1) * Math.sin(time) * 0.1;
+
+        if (padReleased(PadButtons.cross))
+            i.onClick(null);
     }
 }

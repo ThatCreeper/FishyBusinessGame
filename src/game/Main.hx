@@ -1,5 +1,6 @@
 package game;
 
+import hxd.Pad;
 import h2d.Scene;
 import game.titlescreen.TitleScreenGame;
 
@@ -16,6 +17,7 @@ class Main extends hxd.App {
     public static function get_utmod(): Float {
         return 60 / FPS;
     }
+    public static var pad: Null<Pad> = null;
 
     public static var INST: Main;
 
@@ -30,6 +32,11 @@ class Main extends hxd.App {
         #if debug
         hxd.res.Resource.LIVE_UPDATE = true;
         #end
+
+        Pad.wait(p -> {
+            pad = p;
+            pad.onDisconnect = () -> pad = null;
+        });
 
         ucd = new Cooldown();
         

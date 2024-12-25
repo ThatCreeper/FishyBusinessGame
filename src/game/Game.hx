@@ -8,6 +8,15 @@ class Game extends TimeAware {
     public var s2d: h2d.Scene;
     public var camera: Camera;
 
+    public var scrwid(get, never): Int;
+        function get_scrwid() {
+            return s2d.width;
+        }
+    public var scrhei(get, never): Int;
+        function get_scrhei() {
+            return s2d.height;
+        }
+
     public function new() {
         initLayers();
         entities = new List();

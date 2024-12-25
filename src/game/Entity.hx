@@ -14,6 +14,15 @@ class Entity extends TimeAware {
         function get_camera() {
             return game.camera;
         }
+
+    public var scrwid(get, never): Int;
+        function get_scrwid() {
+            return game.scrwid;
+        }
+    public var scrhei(get, never): Int;
+        function get_scrhei() {
+            return game.scrhei;
+        }
     
     public function new(?g: Game, ?layer) {
         if (g == null)

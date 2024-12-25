@@ -1,5 +1,6 @@
 package game;
 
+import hxd.Pad;
 import hxd.Timer;
 
 class TimeAware {
@@ -22,6 +23,10 @@ class TimeAware {
         function get_deltaTime() {
             return Timer.dt;
         }
+    public var pad(get, never): Null<Pad>;
+        function get_pad() {
+            return Main.pad;
+        }
     
     public var cd = new Cooldown();
     public var ucd = new Cooldown();
@@ -29,5 +34,17 @@ class TimeAware {
     function updateCooldowns() {
         cd.update(deltaTime, gameSpeed);
         ucd.update(deltaTime, 1);
+    }
+
+    function padDown(x) {
+        return pad?.isDown(x) ?? false;
+    }
+
+    function padPressed(x) {
+        return pad?.isPressed(x) ?? false;
+    }
+
+    function padReleased(x) {
+        return pad?.isReleased(x) ?? false;
     }
 }
