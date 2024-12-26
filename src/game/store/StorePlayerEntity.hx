@@ -27,45 +27,47 @@ class StorePlayerEntity extends Entity<StoreGame> {
         camera.sscale = 4;
     }
 
-    function collidesTop(xd, yd) {
-        return game.collides(Math.floor((x + xd - 6) / 16), Math.floor((y + yd - 8) / 16)) ||
-               game.collides(Math.floor((x + xd + 5) / 16), Math.floor((y + yd - 8) / 16));
+    function collisionTopLeftX() {
+        return x - 6;
     }
 
-    function collidesBottom(xd, yd) {
-        return game.collides(Math.floor((x + xd - 6) / 16), Math.floor((y + yd + 7) / 16)) ||
-               game.collides(Math.floor((x + xd + 5) / 16), Math.floor((y + yd + 7) / 16));
+    function collisionTopLeftY() {
+        return y - 8;
     }
 
-    function collidesLeft(xd, yd) {
-        return game.collides(Math.floor((x + xd - 6) / 16), Math.floor((y + yd - 8) / 16)) ||
-               game.collides(Math.floor((x + xd - 6) / 16), Math.floor((y + yd + 7) / 16));
+    function collisionBottomRightX() {
+        return x + 5;
     }
 
-    function collidesRight(xd, yd) {
-        return game.collides(Math.floor((x + xd + 5) / 16), Math.floor((y + yd - 8) / 16)) ||
-               game.collides(Math.floor((x + xd + 5) / 16), Math.floor((y + yd + 7) / 16));
+    function collisionBottomRightY() {
+        return y + 7;
     }
 
-    function collidesDelta(xd, yd) {
-        if (xd < 0) {
-            if (yd < 0) {
-                return collidesLeft(xd, yd) || collidesTop(xd, yd);
-            } else {
-                return collidesLeft(xd, yd) || collidesBottom(xd, yd);
-            }
-        } else {
-            if (yd < 0) {
-                return collidesRight(xd, yd) || collidesTop(xd, yd);
-            } else {
-                return collidesRight(xd, yd) || collidesBottom(xd, yd);
+    function collidesIterative(xd, yd) {
+        var tlX = collisionTopLeftX() + xd;
+        var tlY = collisionTopLeftY() + yd;
+        var brX = collisionBottomRightX() + xd;
+        var brY = collisionBottomRightY() + yd;
+
+        var tlXT = Math.floor(tlX / 16);
+        var tlYT = Math.floor(tlY / 16);
+        var brXT = Math.floor(brX / 16);
+        var brYT = Math.floor(brY / 16);
+
+        for (yT in tlYT...(brYT+1)) {
+            for (xT in tlXT...(brXT+1)) {
+                if (game.collides(xT, yT)) {
+                    return true;
+                }
             }
         }
+
+        return false;
     }
 
     // Only works with xd = 1 rn
     function attemptXY(xd, yd) {
-        if (collidesDelta(xd, yd))
+        if (collidesIterative(xd, yd))
             return false;
         x += xd;
         y += yd;
@@ -73,14 +75,14 @@ class StorePlayerEntity extends Entity<StoreGame> {
     }
 
     function attemptX(xd) {
-        if (collidesDelta(xd, 0))
+        if (collidesIterative(xd, 0))
             return false;
         x += xd;
         return true;
     }
 
     function attemptY(yd) {
-        if (collidesDelta(0, yd))
+        if (collidesIterative(0, yd))
             return false;
         y += yd;
         return true;
