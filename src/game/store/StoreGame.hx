@@ -18,7 +18,7 @@ class StoreGame extends Game {
     public function new() {
         super();
 
-        bg = new Bitmap(hxd.Res.map.toTile(), gameLayer);
+        bg = new Bitmap(hxd.Res.map.toTile(), hudLayer);
         bg.x = -16;
         bg.y = -16;
 
@@ -55,6 +55,8 @@ class StoreGame extends Game {
         if (x >= TWID)
             return true;
         if (y >= THEI)
+            return true;
+        if (x == 0 && y == 2)
             return true;
         return false;
     }
