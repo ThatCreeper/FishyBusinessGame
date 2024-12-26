@@ -11,15 +11,13 @@ import h2d.Interactive;
 import h2d.Tile;
 import h2d.Bitmap;
 
-class PlayButtonEntity extends Entity {
-    public var tsgame: TitleScreenGame;
+class PlayButtonEntity extends Entity<TitleScreenGame> {
     var camscale = 1.0;
     var time = 0.0;
     var active = false;
     var i: Interactive;
 
     public function new(?g) {
-        tsgame = g;
         super(g);
         var c = new Object(spr);
         var g = new Bitmap(Tile.fromColor(0xFFFFFF, 128, 32), c);
@@ -39,7 +37,7 @@ class PlayButtonEntity extends Entity {
             if (active)
                 return;
             active = true;
-            tsgame.bubble();
+            game.bubble();
         }
         var t = new Text(DefaultFont.get(), c);
         t.text = "Play Game";

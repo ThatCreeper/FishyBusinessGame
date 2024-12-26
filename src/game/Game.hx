@@ -1,7 +1,7 @@
 package game;
 
 class Game extends TimeAware {
-    public var entities: List<Entity>;
+    public var entities: List<Entity<Dynamic>>;
     public var hudLayer: h2d.Object;
     public var bgLayer: h2d.Object;
     public var gameLayer: h2d.Object;
@@ -65,7 +65,7 @@ class Game extends TimeAware {
         e.dispose();
     }
 
-    public function addEntity(e: Entity) {
+    public function addEntity(e) {
         entities.add(e);
     }
 

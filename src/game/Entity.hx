@@ -2,13 +2,14 @@ package game;
 
 import h2d.Object;
 
-class Entity extends TimeAware {
-    public var game: Game;
+class Entity<T: Game = Game> extends TimeAware {
+    public var game: T;
     public var spr: Object;
     public var x: Float = 0;
     public var y: Float = 0;
     public var scale: Float = 1;
     public var rotation: Float = 0;
+    public var pixelRounding = false;
 
     public var camera(get, never): Camera;
         function get_camera() {
@@ -24,11 +25,11 @@ class Entity extends TimeAware {
             return game.scrhei;
         }
     
-    public function new(?g: Game, ?layer) {
+    public function new(?g: T, ?layer) {
         if (g == null)
-            g = Main.INST.game;
+            g = cast (Main.INST.game);
         game = g;
-        game.addEntity(this);
+        game.addEntity(cast this);
 
         spr = new Object(layer ?? game.gameLayer);
     }
@@ -42,8 +43,13 @@ class Entity extends TimeAware {
     }
 
     public function postUpdate() {
-        spr.x = x;
-        spr.y = y;
+        if (pixelRounding) {
+            spr.x = Math.floor(x);
+            spr.y = Math.floor(y);
+        } else {
+            spr.x = x;
+            spr.y = y;
+        }
         spr.scaleX = scale;
         spr.scaleY = scale;
         spr.rotation = rotation;
@@ -59,7 +65,7 @@ class Entity extends TimeAware {
     }
 
     public function remove() {
-        game.removeEntity(this);
+        game.removeEntity(cast this);
     }
 
     public function dispose() {
