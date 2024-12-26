@@ -1,5 +1,6 @@
 package game;
 
+import game.store.StoreGame;
 import hxd.Pad;
 import h2d.Scene;
 import game.titlescreen.TitleScreenGame;
@@ -41,7 +42,7 @@ class Main extends hxd.App {
 
         ucd = new Cooldown();
         
-        setGame(new TitleScreenGame());
+        setGame(new StoreGame());
         newGameThisFrame = false;
     }
 

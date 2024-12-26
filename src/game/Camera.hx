@@ -17,9 +17,17 @@ class Camera extends TimeAware {
         }
     public var sx = 0.0;
     public var sy = 0.0;
+    public var scale(get, set): Float;
+        function get_scale() {
+            return rscale;
+        }
+        function set_scale(v) {
+            return rscale = sscale = v;
+        }
+    public var sscale = 1.0;
     var rx: Float = 0;
     var ry: Float = 0;
-    public var scale: Float = 1;
+    var rscale = 0.0;
 
     public function new() {
         
@@ -28,12 +36,13 @@ class Camera extends TimeAware {
     public function update(s: h2d.Scene, shaking: Bool) {
         rx = M.lerp(rx, sx, 0.2 * tmod);
         ry = M.lerp(ry, sy, 0.2 * tmod);
+        rscale = M.lerp(rscale, sscale, 0.2 * tmod);
         
         var c = s.camera;
         c.anchorX = 0.5;
         c.anchorY = 0.5;
-        c.scaleX = scale;
-        c.scaleY = scale;
+        c.scaleX = rscale;
+        c.scaleY = rscale;
         c.x = rx;
         c.y = ry;
 
