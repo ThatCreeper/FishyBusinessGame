@@ -11,13 +11,13 @@ class Main extends hxd.App {
     public static var UserGameSpeed: Float = 1;
     public static var TickRate = 60;
     public static var tmod(get, never): Float;
+        static function get_tmod(): Float {
+            return utmod * GameSpeed;
+        }
     public static var utmod(get, never): Float;
-    public static function get_tmod(): Float {
-        return utmod * GameSpeed;
-    }
-    public static function get_utmod(): Float {
-        return 60 / FPS;
-    }
+        static function get_utmod(): Float {
+            return 60 / FPS;
+        }
     public static var pad: Null<Pad> = null;
 
     public static var INST: Main;
