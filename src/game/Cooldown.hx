@@ -23,21 +23,21 @@ class Cooldown {
     }
 
     public function update(dt: Float, speed: Float, skipFrame = false) {
-        for (x in smap.keyValueIterator()) {
-            var n = x.value - dt;
+        for (k => v in smap) {
+            var n = v - dt;
             if (n <= 0)
-                smap.remove(x.key);
+                smap.remove(k);
             else
-                smap.set(x.key, n);
+                smap.set(k, n);
         }
         if (skipFrame)
             return;
-        for (x in fmap.keyValueIterator()) {
-            var n = x.value - speed;
+        for (k => v in fmap) {
+            var n = v - speed;
             if (n <= 0)
-                fmap.remove(x.key);
+                fmap.remove(k);
             else
-                fmap.set(x.key, n);
+                fmap.set(k, n);
         }
     }
 
