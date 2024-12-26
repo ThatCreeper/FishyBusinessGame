@@ -60,4 +60,24 @@ class StoreGame extends Game {
             return true;
         return false;
     }
+
+    /* x1y1
+     *     x2y2
+     */
+    public function collidesPxRect(x1: Float, y1: Float, x2: Float, y2: Float) {
+        var tlXT = Math.floor(x1 / 16);
+        var tlYT = Math.floor(y1 / 16);
+        var brXT = Math.floor(x2 / 16);
+        var brYT = Math.floor(y2 / 16);
+
+        for (yT in tlYT...(brYT+1)) {
+            for (xT in tlXT...(brXT+1)) {
+                if (collides(xT, yT)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }

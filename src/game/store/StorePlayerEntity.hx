@@ -49,20 +49,7 @@ class StorePlayerEntity extends Entity<StoreGame> {
         var brX = collisionBottomRightX() + xd;
         var brY = collisionBottomRightY() + yd;
 
-        var tlXT = Math.floor(tlX / 16);
-        var tlYT = Math.floor(tlY / 16);
-        var brXT = Math.floor(brX / 16);
-        var brYT = Math.floor(brY / 16);
-
-        for (yT in tlYT...(brYT+1)) {
-            for (xT in tlXT...(brXT+1)) {
-                if (game.collides(xT, yT)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return game.collidesPxRect(tlX, tlY, brX, brY);
     }
 
     // Only works with xd = 1 rn
