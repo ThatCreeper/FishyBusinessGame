@@ -4,6 +4,9 @@ import h2d.Tile;
 import h2d.Bitmap;
 import hxd.Key;
 
+// cooldowns:
+// -- ucd --
+// "frozen" stops gameplay. used for ui
 class StorePlayerEntity extends Entity<StoreGame> {
     public function new(?g) {
         super(g);
@@ -23,6 +26,13 @@ class StorePlayerEntity extends Entity<StoreGame> {
         camera.x = StoreGame.PWID / 2;
         camera.y = StoreGame.PHEI / 2;
         camera.sscale = 4;
+
+        if (Key.isPressed(Key.E)) {
+            /* Computer interaction tiles */
+            if (inTile(6, 0) || inTile(7, 0)) {
+                new StoreComputerEntity(this, game);
+            }
+        }
     }
 
     function collisionTopLeftX() {
@@ -73,7 +83,13 @@ class StorePlayerEntity extends Entity<StoreGame> {
         return true;
     }
 
+    function inTile(tx, ty) {
+        return Math.floor(x / 16.0) == tx && Math.floor((y - 1) / 16.0) == ty;
+    }
+
     override function tick() {
+        if (ucd.has("frozen"))
+            return;
         var xd = (Key.isDown(Key.D) ? 1 : 0) - (Key.isDown(Key.A) ? 1 : 0);
         var yd = (Key.isDown(Key.S) ? 1 : 0) - (Key.isDown(Key.W) ? 1 : 0);
         attemptXY(xd, yd) || attemptX(xd) || attemptY(yd);
