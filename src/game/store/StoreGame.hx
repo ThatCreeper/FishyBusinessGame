@@ -21,10 +21,11 @@ class StoreGame extends Game {
         bg = new Bitmap(hxd.Res.map.toTile(), hudLayer);
         bg.x = -16;
         bg.y = -16;
+        bg.alpha = 0.5;
 
         p = new StorePlayerEntity(this);
-        p.x = 7 * 16 + 8;
-        p.y = 8;
+        p.x = 7 * 16;
+        p.y = 16;
 
         whiteoverlay = new Bitmap(Tile.fromColor(0xFFFFFF));
         whiteoverlay.scaleX = 10000;
@@ -67,8 +68,8 @@ class StoreGame extends Game {
     public function collidesPxRect(x1: Float, y1: Float, x2: Float, y2: Float) {
         var tlXT = Math.floor(x1 / 16);
         var tlYT = Math.floor(y1 / 16);
-        var brXT = Math.floor(x2 / 16);
-        var brYT = Math.floor(y2 / 16);
+        var brXT = Math.floor((x2 - 1) / 16);
+        var brYT = Math.floor((y2 - 1) / 16);
 
         for (yT in tlYT...(brYT+1)) {
             for (xT in tlXT...(brXT+1)) {

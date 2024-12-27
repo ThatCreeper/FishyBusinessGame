@@ -9,14 +9,12 @@ class StorePlayerEntity extends Entity<StoreGame> {
         super(g);
 
         var b = new Bitmap(Tile.fromColor(0xA3D147, 16, 32), spr);
-        b.x = -8;
-        b.y = -16 - 8;
+        b.y = -32;
         var B = new Bitmap(Tile.fromColor(0x355ED1, 16, 16), spr);
-        B.x = -8;
-        B.y = -8;
+        B.y = -16;
         var r = new Bitmap(Tile.fromColor(0xFF0000, 12, 16), spr);
-        r.x = -6;
-        r.y = -8;
+        r.x = 2;
+        r.y = -16;
     }
 
     override function update() {
@@ -28,19 +26,19 @@ class StorePlayerEntity extends Entity<StoreGame> {
     }
 
     function collisionTopLeftX() {
-        return x - 6;
+        return x + 2;
     }
 
     function collisionTopLeftY() {
-        return y - 8;
+        return y - 16;
     }
 
     function collisionBottomRightX() {
-        return x + 5;
+        return collisionTopLeftX() + 12;
     }
 
     function collisionBottomRightY() {
-        return y + 7;
+        return y;
     }
 
     function collidesIterative(xd, yd) {
