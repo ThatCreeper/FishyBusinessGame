@@ -11,14 +11,14 @@ class StoreGame extends Game {
     var p: StorePlayerEntity;
 
     public static var TWID = 8;
-    public static var THEI = 5;
+    public static var THEI = 6;
     public static var PWID = TWID * 16;
     public static var PHEI = THEI * 16;
 
     public function new() {
         super();
 
-        bg = new Bitmap(hxd.Res.map.toTile(), hudLayer);
+        bg = new Bitmap(hxd.Res.map.toTile(), gameLayer);
         bg.x = -16;
         bg.y = -16;
         bg.alpha = 0.5;
@@ -57,7 +57,7 @@ class StoreGame extends Game {
             return true;
         if (y >= THEI)
             return true;
-        if (x == 0 && y == 2)
+        if (x >= 6 && y == 1)
             return true;
         return false;
     }
