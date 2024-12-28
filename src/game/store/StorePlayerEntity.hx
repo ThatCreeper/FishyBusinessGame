@@ -27,6 +27,9 @@ class StorePlayerEntity extends Entity<StoreGame> {
         camera.y = StoreGame.PHEI / 2;
         camera.sscale = 4;
 
+        if (ucd.has("frozen"))
+            return;
+
         if (Key.isPressed(Key.E)) {
             /* Computer interaction tiles */
             if (inTile(6, 0) || inTile(7, 0)) {
