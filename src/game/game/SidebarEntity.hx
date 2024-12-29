@@ -25,8 +25,12 @@ class SidebarEntity extends Entity<ClickerGame> {
     var titleEl: Text;
     var cashEl: Text;
 
+    var luigitextEl: Text;
+    var luigibarbg: Bitmap;
+    var luigibarEl: Bitmap;
+
     public function new(?g) {
-        super(g);
+        super(g, g.hudLayer);
 
         dark1 = new Bitmap(Tile.fromColor(0x000000, 1, 1, 0.15), spr);
         dark1.scaleY = 32;
@@ -67,6 +71,15 @@ class SidebarEntity extends Entity<ClickerGame> {
         stoplights.drawCircle(3 * 76 / 4, 32 / 2, 6);
         stoplights.endFill();
 
+        luigitextEl = new Text(DefaultFont.get(), spr);
+        luigitextEl.textColor = 0x000000;
+        luigitextEl.text = "Luigi Bar";
+        luigibarbg = new Bitmap(Tile.fromColor(0x000000), spr);
+        luigibarEl = new Bitmap(Tile.fromColor(0xFF0000), spr);
+        luigibarbg.scaleY = 16;
+        luigibarEl.scaleY = 16;
+        luigibarbg.scaleX = 150;
+
         highlight = new Bitmap(Tile.fromColor(0xFFFFFF, 64, 64), spr);
         typing = new SidebarItemEntity(g);
         typing.y = highlight.y = getY(0);
@@ -99,6 +112,12 @@ class SidebarEntity extends Entity<ClickerGame> {
         titleEl.text = title;
         titleEl.y = (32 - titleEl.textHeight) / 2;
 
-        highlight.y = M.lerpR(highlight.y, getY(game.page.getIndex()), 0.1 * tmod);
+        highlight.y = M.lerpR(highlight.y, getY(game.page.getIndex()), 0.3 * tmod);
+
+        luigitextEl.x = scrwid - 8 - luigitextEl.textWidth;
+        luigitextEl.y = scrhei - 8 - 16 - 2 - luigitextEl.textHeight;
+        luigibarbg.x = luigibarEl.x = scrwid - 8 - 150;
+        luigibarbg.y = luigibarEl.y = scrhei - 8 - 16;
+        luigibarEl.scaleX = 150 * game.luigiprob;
     }
 }

@@ -25,6 +25,9 @@ class Entity<T: Game = Game> extends TimeAware {
             return game.scrhei;
         }
     
+    var attached: List<Entity<T>>;
+    var disposed = false;
+    
     public function new(?g: T, ?layer) {
         if (g == null)
             g = cast (Main.INST.game);
@@ -32,6 +35,8 @@ class Entity<T: Game = Game> extends TimeAware {
         game.addEntity(cast this);
 
         spr = new Object(layer ?? game.gameLayer);
+
+        attached = new List();
     }
 
     public function preUpdate() {
@@ -69,10 +74,19 @@ class Entity<T: Game = Game> extends TimeAware {
     }
 
     public function dispose() {
+        if (disposed)
+            return;
+        disposed = true;
+        for (e in attached)
+            e.dispose();
         spr.remove();
     }
 
     public function shake(s) {
         cd.setS("shake", s);
+    }
+
+    public function attach(e) {
+        attached.add(e);
     }
 }

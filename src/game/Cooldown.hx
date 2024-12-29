@@ -80,4 +80,9 @@ class Cooldown {
             return v * Main.FPS;
         return 0;
     }
+
+    public function reset(cd: String) {
+        fmap.remove(cd);
+        smap.remove(cd);
+    }
 }

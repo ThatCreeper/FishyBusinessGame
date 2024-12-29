@@ -14,7 +14,13 @@ class ClickerGame extends Game {
 
     // State
     public var page = Page.Typing;
-    public var cash = 0;
+    public var cash = 200;
+    public var mostcash = 0;
+    public var luigiprob = 0.0;
+    public var totalletters = 0;
+    public var letters = 0;
+    public var lettersToPost = 30;
+    public var cashPerEmail = 1;
 
     public function new() {
         super();
@@ -44,5 +50,16 @@ class ClickerGame extends Game {
         sidebar.title = "Electro-Shop";
         pageentity?.remove();
         pageentity = new ShopPageEntity(this);
+    }
+
+    public function luigi() {
+        luigiprob += 0.02;
+        luigiprob *= 1.3;
+    }
+
+    public function sendmail() {
+        cash += cashPerEmail;
+        if (cash > mostcash)
+            mostcash = cash;
     }
 }

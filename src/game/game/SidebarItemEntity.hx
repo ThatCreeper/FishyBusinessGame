@@ -11,7 +11,7 @@ class SidebarItemEntity extends Entity<ClickerGame> {
     var highlighted = false;
 
     public function new(?g) {
-        super(g);
+        super(g, g.hudLayer);
 
         highlight = new Bitmap(Tile.fromColor(0x000000, 64, 64, 0.5), spr);
         bitmap = new Bitmap(Tile.fromColor(0x000000, 64, 64, 0.5), spr);
