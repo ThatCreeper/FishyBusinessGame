@@ -10,6 +10,8 @@ import h2d.Mask;
 class ShopPageEntity extends Entity<ClickerGame> {
     var speed: ShopItemEntity;
     var quality: ShopItemEntity;
+    var charity: ShopItemEntity;
+
     var parenter: Object;
     var money: Text;
     var interactive: Interactive;
@@ -55,6 +57,11 @@ class ShopPageEntity extends Entity<ClickerGame> {
         quality.onClick = () -> {
             quality.drain();
             game.cashPerEmail++;
+        }
+        charity = nextItem("Charity", "Make a donation to a charity. Generally increases your reputation", 20);
+        charity.onClick = () -> {
+            charity.drain();
+            game.charity();
         }
 
         money = new Text(DefaultFont.get(), g.hudLayer);

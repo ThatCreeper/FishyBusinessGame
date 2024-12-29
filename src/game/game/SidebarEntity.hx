@@ -1,5 +1,6 @@
 package game.game;
 
+import game.game.ClickerGame.Page;
 import h3d.mat.BlendMode;
 import h2d.Graphics;
 import hxd.res.DefaultFont;
@@ -20,6 +21,7 @@ class SidebarEntity extends Entity<ClickerGame> {
 
     var typing: SidebarItemEntity;
     var store: SidebarItemEntity;
+    var hacker: SidebarItemEntity;
 
     public var title: String;
     var titleEl: Text;
@@ -32,9 +34,9 @@ class SidebarEntity extends Entity<ClickerGame> {
     public function new(?g) {
         super(g, g.hudLayer);
 
-        dark1 = new Bitmap(Tile.fromColor(0x000000, 1, 1, 0.15), spr);
+        dark1 = new Bitmap(Tile.fromColor(0xFFFFFF, 1, 1, 0.15), spr);
         dark1.scaleY = 32;
-        dark2 = new Bitmap(Tile.fromColor(0x000000, 1, 1, 0.15), spr);
+        dark2 = new Bitmap(Tile.fromColor(0xFFFFFF, 1, 1, 0.15), spr);
         dark2.y = 32;
         dark2.scaleX = 76;
 
@@ -86,10 +88,15 @@ class SidebarEntity extends Entity<ClickerGame> {
         typing.x = highlight.x = 6;
         typing.onClick = () -> game.typingPage();
         
-        typing = new SidebarItemEntity(g);
-        typing.y = getY(1);
-        typing.x = 6;
-        typing.onClick = () -> game.storePage();
+        store = new SidebarItemEntity(g);
+        store.y = getY(1);
+        store.x = 6;
+        store.onClick = () -> game.storePage();
+        
+        hacker = new SidebarItemEntity(g);
+        hacker.y = getY(2);
+        hacker.x = 6;
+        hacker.onClick = () -> game.hackerPage();
     }
 
     function getY(id) {
@@ -119,5 +126,8 @@ class SidebarEntity extends Entity<ClickerGame> {
         luigibarbg.x = luigibarEl.x = scrwid - 8 - 150;
         luigibarbg.y = luigibarEl.y = scrhei - 8 - 16;
         luigibarEl.scaleX = 150 * game.luigiprob;
+
+        titleEl.textColor = game.page == Page.Hacker ? 0x00FF00 : 0x000000;
+        dark1.color.r = dark1.color.g = dark1.color.b = dark2.color.r = dark2.color.g = dark2.color.b = game.page == Page.Hacker ? 0xAAAAAA : 0x000000;
     }
 }
