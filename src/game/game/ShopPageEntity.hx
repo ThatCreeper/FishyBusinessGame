@@ -1,5 +1,7 @@
 package game.game;
 
+import h2d.Interactive;
+import hxd.Key;
 import hxd.res.DefaultFont;
 import h2d.Text;
 import h2d.Object;
@@ -10,6 +12,9 @@ class ShopPageEntity extends Entity<ClickerGame> {
     var quality: ShopItemEntity;
     var parenter: Object;
     var money: Text;
+    var interactive: Interactive;
+    var dragging = false;
+    var mouseY = 0.0;
 
     var csiid = 0;
     
@@ -17,6 +22,21 @@ class ShopPageEntity extends Entity<ClickerGame> {
         super(g);
 
         cd.setS("shake", 0.1);
+
+        interactive = new Interactive(scrwid - 78, scrhei - 34, spr);
+        interactive.x = 78;
+        interactive.y = 34;
+        interactive.cursor = Move;
+        interactive.onWheel = x -> {
+            parenter.y -= x.wheelDelta * 20;
+            if (parenter.y > 34 + 15)
+                parenter.y = 34 + 15;
+        };
+        interactive.onPush = x -> {
+            dragging = true;
+            mouseY = game.s2d.mouseY - parenter.y;
+        };
+        interactive.onRelease = x -> dragging = false;
 
         parenter = new Object(spr);
         parenter.x = 78 + 15;
@@ -55,10 +75,19 @@ class ShopPageEntity extends Entity<ClickerGame> {
         money.text = '$$${game.cash}';
         money.x = scrwid - 15 - money.textWidth;
         money.y = (32 - money.textHeight) / 2;
+
+        if (dragging) {
+            parenter.y = game.s2d.mouseY - mouseY;
+            if (parenter.y > 34 + 15)
+                parenter.y = 34 + 15;
+        }
     }
 
     override function postUpdate() {
         super.postUpdate();
+
+        interactive.width = scrwid - 78;
+        interactive.height = scrhei - 34;
     }
 
     override function dispose() {
