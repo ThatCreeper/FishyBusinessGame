@@ -11,6 +11,8 @@ class ShopPageEntity extends Entity<ClickerGame> {
     var speed: ShopItemEntity;
     var quality: ShopItemEntity;
     var charity: ShopItemEntity;
+    var typer: ShopItemEntity;
+    var illust: ShopItemEntity;
 
     var parenter: Object;
     var money: Text;
@@ -47,6 +49,8 @@ class ShopPageEntity extends Entity<ClickerGame> {
         speed = nextItem("Speed", "Send emails faster", 35);
         speed.forceshown = true;
         speed.onClick = () -> {
+            if (speed.cost < 0)
+                return;
             speed.drain();
             game.lettersToPost--;
             if (game.lettersToPost <= 10) {
@@ -62,6 +66,48 @@ class ShopPageEntity extends Entity<ClickerGame> {
         charity.onClick = () -> {
             charity.drain();
             game.charity();
+        }
+        typer = nextItem("Typist", "Hire / Upgrade an employee who sends emails ($1/20s, upgrades dec time)", 5);
+        typer.onClick = () -> {
+            if (typer.cost < 0)
+                return;
+            typer.drain();
+            typer.forceshown = true;
+            typer.cost *= 2;
+            if (game.types == null) {
+                game.types = {
+                    timeuntil: 20,
+                    resettime: 20,
+                    cash: 1
+                }
+            } else {
+                game.types.resettime -= 1;
+                if (game.types.resettime <= 1) {
+                    typer.cost = -1;
+                    game.types.resettime = 1;
+                }
+            }
+        }
+        illust = nextItem("Artist", "More persuasive typist ($3/37s, upgrades dec time)", 16);
+        illust.onClick = () -> {
+            if (illust.cost < 0)
+                return;
+            illust.drain();
+            illust.forceshown = true;
+            illust.cost *= 2;
+            if (game.ilust == null) {
+                game.ilust = {
+                    timeuntil: 37,
+                    resettime: 37,
+                    cash: 3
+                }
+            } else {
+                game.ilust.resettime -= 1;
+                if (game.ilust.resettime <= 1) {
+                    illust.cost = -1;
+                    game.ilust.resettime = 1;
+                }
+            }
         }
 
         money = new Text(DefaultFont.get(), g.hudLayer);

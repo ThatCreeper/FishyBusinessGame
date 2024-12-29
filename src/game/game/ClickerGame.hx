@@ -9,8 +9,14 @@ enum Page {
     Hacker;
 }
 
+typedef Typer = {
+    timeuntil: Float,
+    resettime: Float,
+    cash: Int
+}
+
 class ClickerGame extends Game {
-    public var bg: BackgroundEntity;
+    public var bg: BackgroundEntity<ClickerGame>;
     public var sidebar: SidebarEntity;
     public var pageentity: Entity<ClickerGame>;
 
@@ -26,8 +32,10 @@ class ClickerGame extends Game {
     public var cashPerEmail = 1;
     public var hackerProg = 0.0;
     public var hackerPts = 0;
+    public var types: Typer = null;
+    public var ilust: Typer = null;
 
-    var timeUntilLuigi = 120.0;
+    var timeUntilLuigi = 0.0;
 
     public function new() {
         super();
@@ -46,11 +54,26 @@ class ClickerGame extends Game {
 
         timeUntilLuigi -= Timer.dt;
         if (timeUntilLuigi <= 0) {
-            timeUntilLuigi = 120;
+            timeUntilLuigi = 60;
             var roll = Math.random();
-            if (roll < luigiprob)
-                trace("Killed");
+            if (roll < luigiprob) {
+                Main.setGame(new KilledGame(this));
+            }
         }
+
+        types.timeuntil -= Timer.dt;
+        if (types.timeuntil <= 0) {
+            types.timeuntil = types.resettime;
+            cash += types.cash;
+        }
+        ilust.timeuntil -= Timer.dt;
+        if (ilust.timeuntil <= 0) {
+            ilust.timeuntil = ilust.resettime;
+            cash += ilust.cash;
+        }
+
+        if (cash > mostcash)
+            mostcash = cash;
     }
 
     public function typingPage() {
@@ -87,7 +110,7 @@ class ClickerGame extends Game {
     }
 
     public function charity() {
-        luigiprob -= 0.04;
+        luigiprob -= 0.004;
         if (luigiprob < 0)
             luigiprob = 0;
     }

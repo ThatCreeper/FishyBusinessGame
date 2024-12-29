@@ -58,21 +58,33 @@ class HackerPageEntity extends Entity<ClickerGame> {
         var pressed = @:privateAccess Key.keyPressed;
         for (i in 7...pressed.length) {
             if (Key.isPressed(i)) {
-                game.hackerProg += 1 / 20;
+                game.hackerProg += 1 / 100;
                 text.text += wakeup;
             }
+        }
+
+        if (text.text.length > 5000) {
+            text.text = "";
+            for (i in 0...50) {
+                text.text += wakeup;
+            }
+            text.y = scrhei - text.textHeight;
         }
 
         if (game.hackerProg > 1) {
             game.hackerProg = 0;
             text.text += confirmed;
             game.hackerPts++;
+            game.cash = Math.floor(game.cash * 1.2);
+            if (game.cash > game.mostcash)
+                game.mostcash = game.cash;
+            game.luigi();
         }
 
         text.y = M.lerp(text.y, scrhei - text.textHeight, 0.3 * tmod);
         bar.scaleY = (scrhei - 34) * game.hackerProg;
         bar.y = scrhei - bar.scaleY;
         bar.x = scrwid - 32;
-        hpts.text = 'H${game.hackerPts}';
+        hpts.text = '$$${game.cash}';
     }
 }

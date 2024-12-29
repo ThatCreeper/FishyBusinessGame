@@ -1,9 +1,10 @@
 package game.game;
 
+import game.Game;
 import h2d.Tile;
 import h2d.Bitmap;
 
-class BackgroundEntity extends Entity<ClickerGame> {
+class BackgroundEntity<T: Game> extends Entity<T> {
     var b: Bitmap;
     public var c(never, set): Int;
         function set_c(v) {
