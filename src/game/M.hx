@@ -5,6 +5,17 @@ class M {
         return from + (to - from) * x;
     }
 
+    public static function lerpR(from: Float, to: Float, x: Float) {
+        var l = lerp(from, to, x);
+        if (Math.abs(l - to) < 1)
+            return to;
+        return l;
+    }
+
+    public static function lerpI(from: Int, to: Int, x: Float): Int {
+        return from + cast ((to - from) * x);
+    }
+
     public static function rng(min: Float, max: Float) {
         return lerp(min, max, Math.random());
     }

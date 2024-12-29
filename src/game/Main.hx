@@ -1,9 +1,8 @@
 package game;
 
-import game.store.StoreGame;
+import game.game.ClickerGame;
 import hxd.Pad;
 import h2d.Scene;
-import game.titlescreen.TitleScreenGame;
 
 class Main extends hxd.App {
     public static var FPS: Float = 60;
@@ -42,7 +41,7 @@ class Main extends hxd.App {
 
         ucd = new Cooldown();
         
-        setGame(new StoreGame());
+        setGame(new ClickerGame());
         newGameThisFrame = false;
     }
 

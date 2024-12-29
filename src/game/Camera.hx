@@ -25,9 +25,10 @@ class Camera extends TimeAware {
             return rscale = sscale = v;
         }
     public var sscale = 1.0;
+    public var centered = true;
     var rx: Float = 0;
     var ry: Float = 0;
-    var rscale = 0.0;
+    var rscale = 1.0;
 
     public function new() {
         
@@ -39,8 +40,13 @@ class Camera extends TimeAware {
         rscale = M.lerp(rscale, sscale, 0.2 * tmod);
         
         var c = s.camera;
-        c.anchorX = 0.5;
-        c.anchorY = 0.5;
+        if (centered) {
+            c.anchorX = 0.5;
+            c.anchorY = 0.5;
+        } else {
+            c.anchorX = 0;
+            c.anchorY = 0;
+        }
         c.scaleX = rscale;
         c.scaleY = rscale;
         c.x = rx;
@@ -61,6 +67,7 @@ class Camera extends TimeAware {
         return world;
     }
 
+    // TODO: Function assumes centered = true. Also it probably doesn't work.
     public function screenToWorldY(screen) {
         var scrHei = Main.INST.game.s2d.height;
         var centerRelScreen = screen - scrHei / 2.0;
