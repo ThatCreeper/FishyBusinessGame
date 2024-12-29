@@ -1,2 +1,4 @@
 *.hl
 out/
+bin/game.js
+bin/index.zip

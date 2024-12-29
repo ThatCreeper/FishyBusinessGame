@@ -67,7 +67,7 @@ class ShopPageEntity extends Entity<ClickerGame> {
             charity.drain();
             game.charity();
         }
-        typer = nextItem("Typist", "Hire / Upgrade an employee who sends emails ($1/20s, upgrades dec time)", 5);
+        typer = nextItem("Typist", "Hire / Upgrade an employee who sends emails ($1/6s, /2s)", 5);
         typer.onClick = () -> {
             if (typer.cost < 0)
                 return;
@@ -76,19 +76,20 @@ class ShopPageEntity extends Entity<ClickerGame> {
             typer.cost *= 2;
             if (game.types == null) {
                 game.types = {
-                    timeuntil: 20,
-                    resettime: 20,
+                    timeuntil: 6,
+                    resettime: 6,
                     cash: 1
                 }
             } else {
-                game.types.resettime -= 1;
-                if (game.types.resettime <= 1) {
+                game.types.timeuntil /= 2;
+                game.types.resettime /= 2;
+                if (game.types.resettime <= 0) {
                     typer.cost = -1;
                     game.types.resettime = 1;
                 }
             }
         }
-        illust = nextItem("Artist", "More persuasive typist ($3/37s, upgrades dec time)", 16);
+        illust = nextItem("Artist", "More persuasive typist ($3/8s, upgrades dec time /2s)", 16);
         illust.onClick = () -> {
             if (illust.cost < 0)
                 return;
@@ -97,13 +98,14 @@ class ShopPageEntity extends Entity<ClickerGame> {
             illust.cost *= 2;
             if (game.ilust == null) {
                 game.ilust = {
-                    timeuntil: 37,
-                    resettime: 37,
+                    timeuntil: 8,
+                    resettime: 8,
                     cash: 3
                 }
             } else {
-                game.ilust.resettime -= 1;
-                if (game.ilust.resettime <= 1) {
+                game.ilust.timeuntil /= 2;
+                game.ilust.resettime /= 2;
+                if (game.ilust.resettime <= 0) {
                     illust.cost = -1;
                     game.ilust.resettime = 1;
                 }

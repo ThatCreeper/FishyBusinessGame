@@ -168,7 +168,7 @@ class ShopItemEntity extends Entity<ClickerGame> {
         bg.scaleX = bg.scaleY = 1 + rhovered * 0.1;
         dsfilter.distance = Math.max(0, 4 + rhovered * 16);
 
-        costText.text = cost < 0 ? "Out-of-stock" : '$$$cost';
+        costText.text = cost < 0 ? "None" : '$$$cost';
     }
 
     public dynamic function onClick() {

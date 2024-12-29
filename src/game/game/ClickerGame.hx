@@ -22,8 +22,8 @@ class ClickerGame extends Game {
 
     // State
     public var page = Page.Typing;
-    public var cash = 200;
-    public var totalcash = 200;
+    public var cash = 0;
+    public var totalcash = 0;
     public var mostcash = 0;
     public var luigiprob = 0.0;
     public var totalletters = 0;
@@ -54,22 +54,26 @@ class ClickerGame extends Game {
 
         timeUntilLuigi -= Timer.dt;
         if (timeUntilLuigi <= 0) {
-            timeUntilLuigi = 60;
+            timeUntilLuigi = 30;
             var roll = Math.random();
             if (roll < luigiprob) {
                 Main.setGame(new KilledGame(this));
             }
         }
 
-        types.timeuntil -= Timer.dt;
-        if (types.timeuntil <= 0) {
-            types.timeuntil = types.resettime;
-            cash += types.cash;
+        if (types != null) {
+            types.timeuntil -= Timer.dt;
+            if (types.timeuntil <= 0) {
+                types.timeuntil = types.resettime;
+                cash += types.cash;
+            }
         }
-        ilust.timeuntil -= Timer.dt;
-        if (ilust.timeuntil <= 0) {
-            ilust.timeuntil = ilust.resettime;
-            cash += ilust.cash;
+        if (ilust != null) {
+            ilust.timeuntil -= Timer.dt;
+            if (ilust.timeuntil <= 0) {
+                ilust.timeuntil = ilust.resettime;
+                cash += ilust.cash;
+            }
         }
 
         if (cash > mostcash)

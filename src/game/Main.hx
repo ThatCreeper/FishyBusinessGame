@@ -29,7 +29,7 @@ class Main extends hxd.App {
 
     override function init() {
         INST = this;
-        hxd.Res.initLocal();
+        hxd.Res.initEmbed();
         #if debug
         hxd.res.Resource.LIVE_UPDATE = true;
         #end
