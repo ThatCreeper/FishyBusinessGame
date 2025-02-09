@@ -1,5 +1,6 @@
 package game.game;
 
+import h2d.Object;
 import hxd.res.DefaultFont;
 import h2d.Text;
 import h2d.Interactive;
@@ -18,6 +19,8 @@ class ShopItemEntity extends Entity<ClickerGame> {
     var title: Text;
     var desc: Text;
     var costText: Text;
+
+    var popupHolder: Object;
     var nocashText: Text;
     var boughtText: Text;
 
@@ -25,6 +28,15 @@ class ShopItemEntity extends Entity<ClickerGame> {
     var shovered = 0.0;
     var rncs = 1.0;
     var rbs = 1.0;
+
+    var dragging = false;
+    var draggingX = 0.0;
+    var draggingY = 0.0;
+    var sdragrot = 0.0;
+    var rdragrot = 0.0;
+
+    var rtx = 0.0;
+    var rty = 0.0;
 
     public var cost: Int;
     public var forceshown = false;
@@ -35,6 +47,8 @@ class ShopItemEntity extends Entity<ClickerGame> {
         super(g, p);
         page = e;
         e.attach(this);
+
+        x = (scrwid - 78 - 15) / 2;
 
         idx = id;
 
@@ -52,10 +66,18 @@ class ShopItemEntity extends Entity<ClickerGame> {
         inter = new Interactive(100, 160, bg);
         inter.x = -50;
         inter.y = -80;
-        inter.onOver = x -> shovered = 1.0;
-        inter.onOut = x -> shovered = 0.0;
-        inter.onPush = x -> shovered = -1.0;
-        inter.onRelease = x -> shovered = 0.0;
+        inter.onOver = x -> if (!dragging) shovered = 1.0;
+        inter.onOut = x -> if (!dragging) shovered = 0.0;
+        inter.onPush = x -> {
+            shovered = -1.0;
+            dragging = !purchaseable();
+            draggingX = game.s2d.mouseX - this.x;
+            draggingY = game.s2d.mouseY - this.y;
+        }
+        inter.onRelease = x -> {
+            shovered = 0.0;
+            dragging = false;
+        }
         inter.onClick = x -> {
             if (purchaseable()) {
                 onClick();
@@ -93,7 +115,9 @@ class ShopItemEntity extends Entity<ClickerGame> {
 
         cost = c;
 
-        nocashText = new Text(bfnt, spr);
+        popupHolder = new Object(spr);
+
+        nocashText = new Text(bfnt, popupHolder);
         nocashText.x = 50;
         nocashText.y = (160 - nocashText.textHeight) / 2;
         nocashText.textAlign = Align.Center;
@@ -107,7 +131,7 @@ class ShopItemEntity extends Entity<ClickerGame> {
         nocashText.text = "No cash!";
         nocashText.visible = false;
         
-        boughtText = new Text(bfnt, spr);
+        boughtText = new Text(bfnt, popupHolder);
         boughtText.x = 50;
         boughtText.y = (160 - boughtText.textHeight) / 2;
         boughtText.textAlign = Align.Center;
@@ -131,8 +155,10 @@ class ShopItemEntity extends Entity<ClickerGame> {
     }
 
     function setXY(nx, ny) {
-        x = nx * 115;
-        y = ny * 175;
+        rtx = nx * 115;
+        rty = ny * 175;
+        x = M.lerpR(x, rtx, 0.3 * tmod);
+        y = M.lerpR(y, rty, 0.3 * tmod);
     }
 
     override function update() {
@@ -142,8 +168,19 @@ class ShopItemEntity extends Entity<ClickerGame> {
         var maxX = Math.floor(usablewid / 115);
         if (maxX < 1)
             maxX = 1;
-        setXY(idx % maxX, Math.floor(idx / maxX));
+        if (dragging) {
+            var lx = x;
+            var ly = y;
+            x = game.s2d.mouseX - draggingX;
+            y = game.s2d.mouseY - draggingY;
+            sdragrot = (x - lx) * 0.03;
+        } else {
+            setXY(idx % maxX, Math.floor(idx / maxX));
+            sdragrot = 0;
+        }
 
+        popupHolder.x = rtx - x;
+        popupHolder.y = rty - y;
         rncs = M.lerp(rncs, 1, 0.3 * tmod);
         nocashText.scaleX = rncs;
         nocashText.scaleY = rncs;
@@ -163,8 +200,9 @@ class ShopItemEntity extends Entity<ClickerGame> {
             desc.text = "???";
         }
 
+        rdragrot = M.lerp(rdragrot, sdragrot, 0.15 * tmod);
         rhovered = M.lerp(rhovered, shovered, 0.15 * tmod);
-        bg.rotation = rhovered * 0.01;
+        bg.rotation = rhovered * 0.01 + rdragrot;
         bg.scaleX = bg.scaleY = 1 + rhovered * 0.1;
         dsfilter.distance = Math.max(0, 4 + rhovered * 16);
 

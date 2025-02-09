@@ -1,5 +1,7 @@
 package game.game;
 
+import hxd.res.DefaultFont;
+import h2d.Text;
 import hxd.Timer;
 import hxd.Key;
 
@@ -19,6 +21,9 @@ class ClickerGame extends Game {
     public var bg: BackgroundEntity<ClickerGame>;
     public var sidebar: SidebarEntity;
     public var pageentity: Entity<ClickerGame>;
+
+    public var cashNode: Text;
+    public var initCashNode = true;
 
     // State
     public var page = Page.Typing;
@@ -41,8 +46,11 @@ class ClickerGame extends Game {
         super();
         camera.centered = false;
 
+        cashNode = new Text(DefaultFont.get());
+
         bg = new BackgroundEntity(this);
         sidebar = new SidebarEntity(this);
+        hudLayer.addChild(cashNode);
 
         typingPage();
 

@@ -1,5 +1,7 @@
 package game.game;
 
+import h2d.Mask;
+import h2d.Graphics;
 import hxd.res.DefaultFont;
 import h2d.Text;
 import h2d.Tile;
@@ -9,11 +11,10 @@ import hxd.Key;
 class TypingPageEntity extends Entity<ClickerGame> {
     var wid = 0.0;
     var barbg: Bitmap;
-    var bar: Bitmap;
+    var bar: Mask;
     var bgr = 0.0;
     var bgg = 0.0;
     var bgb = 0.0;
-    var cashtext: Text;
     var samanthatext: Text;
     var emailsent: Text;
     var textrx = 0.0;
@@ -29,24 +30,43 @@ class TypingPageEntity extends Entity<ClickerGame> {
         samanthatext.y = 32;
         samanthatext.textColor = 0x000000;
         samanthatext.alpha = 0.3;
+        samanthatext.dropShadow = {
+            dx: 0,
+            dy: 1,
+            alpha: 1,
+            color: 0xF1F6E4
+        }
 
         barbg = new Bitmap(Tile.fromColor(0xFFFFFF), spr);
         barbg.scaleX = 250;
         barbg.scaleY = 32;
-        bar = new Bitmap(Tile.fromColor(0x639FEE), spr);
-        bar.scaleX = 0;
-        bar.scaleY = 32;
+        bar = new Mask(0, 32, spr);
+        var b = new Graphics(bar);
+        b.beginFill(0x639FEE);
+        b.drawRect(0, 0, 250, 32);
+        b.endFill();
+        b.beginFill(0x000000);
+        b.drawRect(0, 0, 250, 1);
+        b.drawRect(0, 0, 1, 32);
+        b.drawRect(0, 32 - 1, 250, 1);
+        b.drawRect(250 - 1, 0, 1, 32);
+        b.beginFill(0xF1F6E4);
+        b.drawRect(1, 1, 248, 1);
+        b.drawRect(1, 1, 1, 30);
+        b.drawRect(1, 32 - 2, 248, 1);
+        b.drawRect(250 - 2, 1, 1, 30);
+        b.endFill();
 
         var fn = DefaultFont.get().clone();
-        fn.resizeTo(36);
-        cashtext = new Text(fn, spr);
-        cashtext.textColor = 0x034E03;
+        //fn.resizeTo(36);
+        //game.cashNode = new Text(fn, spr);
+        game.cashNode.textColor = 0x034E03;
         
         // for (x in 0...game.totalletters) {
         //     samanthatext.text += samantha.charAt(x % samantha.length);
         // }
 
-        fn = DefaultFont.get().clone();
+        //fn = DefaultFont.get().clone();
         fn.resizeTo(16);
         emailsent = new Text(fn, spr);
         emailsent.textColor = 0x639FEE;
@@ -89,14 +109,16 @@ class TypingPageEntity extends Entity<ClickerGame> {
             textry = Math.random() * 32;
         }
 
-        wid = M.lerp(wid, game.letters / game.lettersToPost, 0.15 * tmod);
+        var swid = game.letters / game.lettersToPost;
+        wid = M.lerp(wid, swid, 0.15 * tmod);
         bgr = M.lerp(bgr, 0, 0.1 * tmod);
         bgg = M.lerp(bgg, 0, 0.1 * tmod);
         bgb = M.lerp(bgb, 0, 0.1 * tmod);
 
         barbg.x = bar.x = 76 + (scrwid - 76 - 250) / 2;
         barbg.y = bar.y = 32 + (scrhei - 32 - 32) / 2;
-        bar.scaleX = wid * 250;
+        bar.width = Math.floor(wid * 250);
+        bar.alpha = M.lerp(0.7, 1, swid);
         barbg.color.r = bgr;
         barbg.color.g = bgg;
         barbg.color.b = bgb;
@@ -105,10 +127,19 @@ class TypingPageEntity extends Entity<ClickerGame> {
         emailsent.y = barbg.y - 8 + textry;
         emailsent.visible = cd.has("sent");
 
-        cashtext.text = '$$${game.cash}';
-        cashtext.x = 76 + (scrwid - 76 - cashtext.textWidth) / 2;
-        cashtext.y = 32 + (scrhei - 32) / 3 - cashtext.textHeight / 2;
-        
+        game.cashNode.text = '$$${game.cash}';
+        var cnx = 76 + (scrwid - 76 - game.cashNode.textWidth) / 2;
+        var cny = 32 + (scrhei - 32) / 3 - game.cashNode.textHeight / 2;
+        if (game.initCashNode) {
+            game.cashNode.x = cnx;
+            game.cashNode.y = cny;
+        } else {
+            game.cashNode.x = M.lerpR(game.cashNode.x, cnx, 0.5 * tmod);
+            game.cashNode.y = M.lerpR(game.cashNode.y, cny, 0.5 * tmod);
+        }
+        game.cashNode.scaleX = game.cashNode.scaleY = game.initCashNode ? 3 : M.lerp(game.cashNode.scaleX, 3, 0.5 * tmod);
+        game.initCashNode = false;
+
         samanthatext.maxWidth = scrwid - 76;
     }
 }

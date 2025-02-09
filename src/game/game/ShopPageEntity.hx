@@ -15,7 +15,6 @@ class ShopPageEntity extends Entity<ClickerGame> {
     var illust: ShopItemEntity;
 
     var parenter: Object;
-    var money: Text;
     var interactive: Interactive;
     var dragging = false;
     var mouseY = 0.0;
@@ -112,8 +111,7 @@ class ShopPageEntity extends Entity<ClickerGame> {
             }
         }
 
-        money = new Text(DefaultFont.get(), g.hudLayer);
-        money.textColor = 0x003B00;
+        game.cashNode.textColor = 0x003B00;
     }
 
     function nextItem(n, d, c) {
@@ -127,9 +125,10 @@ class ShopPageEntity extends Entity<ClickerGame> {
 
         game.bg.sc = 0xF1B3B3;
 
-        money.text = '$$${game.cash}';
-        money.x = scrwid - 15 - money.textWidth;
-        money.y = (32 - money.textHeight) / 2;
+        game.cashNode.text = '$$${game.cash}';
+        game.cashNode.x = M.lerpR(game.cashNode.x, scrwid - 15 - game.cashNode.textWidth, 0.5 * tmod);
+        game.cashNode.y = M.lerpR(game.cashNode.y, (32 - game.cashNode.textHeight) / 2, 0.5 * tmod);
+        game.cashNode.scaleX = game.cashNode.scaleY = M.lerp(game.cashNode.scaleX, 1, 0.5 * tmod);
 
         if (dragging) {
             parenter.y = game.s2d.mouseY - mouseY;
@@ -143,10 +142,5 @@ class ShopPageEntity extends Entity<ClickerGame> {
 
         interactive.width = scrwid - 78;
         interactive.height = scrhei - 34;
-    }
-
-    override function dispose() {
-        super.dispose();
-        money.remove();
     }
 }

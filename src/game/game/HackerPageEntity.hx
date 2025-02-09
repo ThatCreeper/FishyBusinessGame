@@ -19,7 +19,6 @@ class HackerPageEntity extends Entity<ClickerGame> {
 
     var text: Text;
     var bar: Bitmap;
-    var hpts: Text;
 
     public function new(?g) {
         super(g);
@@ -36,18 +35,15 @@ class HackerPageEntity extends Entity<ClickerGame> {
         bar = new Bitmap(Tile.fromColor(0x00FF00), spr);
         bar.scaleX = 32;
 
-        var fnt = DefaultFont.get().clone();
-        fnt.resizeTo(24);
-        hpts = new Text(fnt, spr);
-        hpts.textColor = 0x00FF00;
-        hpts.dropShadow = {
-            dx: 1,
-            dy: 1,
-            alpha: 1,
-            color: 0x100009
-        };
-        hpts.x = 78;
-        hpts.y = 34;
+        //var fnt = DefaultFont.get().clone();
+        //fnt.resizeTo(24);
+        game.cashNode.textColor = 0x00FF00;
+        // hpts.dropShadow = {
+        //     dx: 1,
+        //     dy: 1,
+        //     alpha: 1,
+        //     color: 0x100009
+        // };
     }
 
     override function update() {
@@ -85,6 +81,9 @@ class HackerPageEntity extends Entity<ClickerGame> {
         bar.scaleY = (scrhei - 34) * game.hackerProg;
         bar.y = scrhei - bar.scaleY;
         bar.x = scrwid - 32;
-        hpts.text = '$$${game.cash}';
+        game.cashNode.text = '$$${game.cash}';
+        game.cashNode.x = M.lerpR(game.cashNode.x, 78, 0.5 * tmod);
+        game.cashNode.y = M.lerpR(game.cashNode.y, 34, 0.5 * tmod);
+        game.cashNode.scaleX = game.cashNode.scaleY = M.lerp(game.cashNode.scaleX, 2, 0.5 * tmod);
     }
 }
