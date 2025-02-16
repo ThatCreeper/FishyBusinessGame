@@ -60,7 +60,6 @@ class TypingPageEntity extends Entity<ClickerGame> {
         var fn = DefaultFont.get().clone();
         //fn.resizeTo(36);
         //game.cashNode = new Text(fn, spr);
-        game.cashNode.textColor = 0x034E03;
         
         // for (x in 0...game.totalletters) {
         //     samanthatext.text += samantha.charAt(x % samantha.length);
@@ -127,18 +126,10 @@ class TypingPageEntity extends Entity<ClickerGame> {
         emailsent.y = barbg.y - 8 + textry;
         emailsent.visible = cd.has("sent");
 
-        game.cashNode.text = '$$${game.cash}';
-        var cnx = 76 + (scrwid - 76 - game.cashNode.textWidth) / 2;
-        var cny = 32 + (scrhei - 32) / 3 - game.cashNode.textHeight / 2;
-        if (game.initCashNode) {
-            game.cashNode.x = cnx;
-            game.cashNode.y = cny;
-        } else {
-            game.cashNode.x = M.lerpR(game.cashNode.x, cnx, 0.5 * tmod);
-            game.cashNode.y = M.lerpR(game.cashNode.y, cny, 0.5 * tmod);
-        }
-        game.cashNode.scaleX = game.cashNode.scaleY = game.initCashNode ? 3 : M.lerp(game.cashNode.scaleX, 3, 0.5 * tmod);
-        game.initCashNode = false;
+        var cnx = 76 + (scrwid - 76 - game.cashWid) / 2;
+        var cny = 32 + (scrhei - 32) / 3 - (game.cashHei * 3) / 2;
+        
+        game.moveCash(cnx, cny, 0x034E03, 3);
 
         samanthatext.maxWidth = scrwid - 76;
     }

@@ -110,8 +110,6 @@ class ShopPageEntity extends Entity<ClickerGame> {
                 }
             }
         }
-
-        game.cashNode.textColor = 0x003B00;
     }
 
     function nextItem(n, d, c) {
@@ -125,10 +123,7 @@ class ShopPageEntity extends Entity<ClickerGame> {
 
         game.bg.sc = 0xF1B3B3;
 
-        game.cashNode.text = '$$${game.cash}';
-        game.cashNode.x = M.lerpR(game.cashNode.x, scrwid - 15 - game.cashNode.textWidth, 0.5 * tmod);
-        game.cashNode.y = M.lerpR(game.cashNode.y, (32 - game.cashNode.textHeight) / 2, 0.5 * tmod);
-        game.cashNode.scaleX = game.cashNode.scaleY = M.lerp(game.cashNode.scaleX, 1, 0.5 * tmod);
+        game.moveCash(scrwid - 15 - game.cashWid, (32 - game.cashHei) / 2, 0x003B00, 1);
 
         if (dragging) {
             parenter.y = game.s2d.mouseY - mouseY;

@@ -28,4 +28,15 @@ class M {
         return x1 <= x4 && x2 >= x3 &&
                y1 <= y4 && y2 >= y3;
     }
+
+    public static function cubicBezier(p1, p2, p3, p4, x) {
+        var a = lerp(p1, p2, x);
+        var b = lerp(p2, p3, x);
+        var c = lerp(p3, p4, x);
+
+        var A = lerp(a, b, x);
+        var B = lerp(b, c, x);
+
+        return lerp(A, B, x);
+    }
 }

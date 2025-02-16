@@ -37,7 +37,6 @@ class HackerPageEntity extends Entity<ClickerGame> {
 
         //var fnt = DefaultFont.get().clone();
         //fnt.resizeTo(24);
-        game.cashNode.textColor = 0x00FF00;
         // hpts.dropShadow = {
         //     dx: 1,
         //     dy: 1,
@@ -81,9 +80,7 @@ class HackerPageEntity extends Entity<ClickerGame> {
         bar.scaleY = (scrhei - 34) * game.hackerProg;
         bar.y = scrhei - bar.scaleY;
         bar.x = scrwid - 32;
-        game.cashNode.text = '$$${game.cash}';
-        game.cashNode.x = M.lerpR(game.cashNode.x, 78, 0.5 * tmod);
-        game.cashNode.y = M.lerpR(game.cashNode.y, 34, 0.5 * tmod);
-        game.cashNode.scaleX = game.cashNode.scaleY = M.lerp(game.cashNode.scaleX, 2, 0.5 * tmod);
+        
+        game.moveCash(78, 34, 0x00FF00, 2);
     }
 }

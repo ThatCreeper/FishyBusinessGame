@@ -22,8 +22,23 @@ class ClickerGame extends Game {
     public var sidebar: SidebarEntity;
     public var pageentity: Entity<ClickerGame>;
 
-    public var cashNode: Text;
-    public var initCashNode = true;
+    var cashNode: Text;
+    var initCashNode = true;
+    public var cashWid(get, never): Float;
+    public var cashHei(get, never): Float;
+    var cashStartAnimX = 0.0;
+    var cashEndAnimX = 0.0;
+    var cashStartAnimY = 0.0;
+    var cashEndAnimY = 0.0;
+    var cashAnimTime = 0.0;
+    var cashEndAnimScale = 0.0;
+    function get_cashWid() {
+        return cashNode.textWidth * cashNode.scaleX;
+    }
+
+    function get_cashHei() {
+        return cashNode.textHeight;
+    }
 
     // State
     public var page = Page.Typing;
@@ -86,6 +101,14 @@ class ClickerGame extends Game {
 
         if (cash > mostcash)
             mostcash = cash;
+
+        cashNode.text = '$$${cash}';
+    }
+
+    override function postUpdate() {
+        super.postUpdate();
+
+        updateCash();
     }
 
     public function typingPage() {
@@ -125,5 +148,38 @@ class ClickerGame extends Game {
         luigiprob -= 0.004;
         if (luigiprob < 0)
             luigiprob = 0;
+    }
+
+    public function moveCash(x, y, col, sz) {
+        cashNode.textColor = col;
+        if (cashEndAnimX == x &&
+            cashEndAnimY == y &&
+            cashEndAnimScale == sz)
+            return;
+        cashEndAnimX = x;
+        cashEndAnimY = y;
+        cashEndAnimScale = sz;
+        if (initCashNode || cashAnimTime > 0.5) {
+            cashAnimTime = initCashNode ? 10_000 : 0;
+            cashStartAnimX = cashNode.x;
+            cashStartAnimY = cashNode.y;
+        }
+        initCashNode = false;
+    }
+
+    function easeOutBack(x: Float) {
+        var c1 = 1.70158;
+        var c3 = c1 + 1;
+        
+        return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
+    }
+
+    function updateCash() {
+        cashAnimTime += deltaTime;
+        cashAnimTime = Math.min(cashAnimTime, 0.5);
+        var eased = easeOutBack(cashAnimTime / 0.5);
+        cashNode.x = M.lerp(cashStartAnimX, cashEndAnimX, eased);
+        cashNode.y = M.lerp(cashStartAnimY, cashEndAnimY, eased);
+        cashNode.scaleX = cashNode.scaleY = M.lerp(cashNode.scaleX, cashEndAnimScale, 0.2 * tmod);
     }
 }
