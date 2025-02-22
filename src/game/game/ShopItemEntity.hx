@@ -1,5 +1,6 @@
 package game.game;
 
+import h2d.col.Point;
 import h2d.Object;
 import hxd.res.DefaultFont;
 import h2d.Text;
@@ -171,8 +172,12 @@ class ShopItemEntity extends Entity<ClickerGame> {
         if (dragging) {
             var lx = x;
             var ly = y;
-            x = game.s2d.mouseX - draggingX;
-            y = game.s2d.mouseY - draggingY;
+            var nx = game.s2d.mouseX;// - draggingX;
+            var ny = game.s2d.mouseY;// - draggingY;
+            var p = new Point(nx, ny);
+            spr.parent.globalToLocal(p);
+            x = M.lerpR(x, p.x - 50, 0.5 * tmod);
+            y = M.lerpR(y, p.y - 80, 0.5 * tmod);
             sdragrot = (x - lx) * 0.03;
         } else {
             setXY(idx % maxX, Math.floor(idx / maxX));
