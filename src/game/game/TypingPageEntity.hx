@@ -126,7 +126,7 @@ class TypingPageEntity extends Entity<ClickerGame> {
         emailsent.y = barbg.y - 8 + textry;
         emailsent.visible = cd.has("sent");
 
-        var cnx = 76 + (scrwid - 76 - game.cashWid) / 2;
+        var cnx = 76 + (scrwid - 76 - game.cashWid * 3) / 2;
         var cny = 32 + (scrhei - 32) / 3 - (game.cashHei * 3) / 2;
         
         game.moveCash(cnx, cny, 0x034E03, 3);

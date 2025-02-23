@@ -1,5 +1,6 @@
 package game.game;
 
+import hxd.Key;
 import h2d.col.Point;
 import h2d.Object;
 import hxd.res.DefaultFont;
@@ -39,7 +40,7 @@ class ShopItemEntity extends Entity<ClickerGame> {
     var rtx = 0.0;
     var rty = 0.0;
 
-    public var cost: Int;
+    public var cost: Float;
     public var forceshown = false;
     var name: String;
     var description: String;
@@ -49,7 +50,8 @@ class ShopItemEntity extends Entity<ClickerGame> {
         page = e;
         e.attach(this);
 
-        x = (scrwid - 78 - 15) / 2;
+        //x = (scrwid - 78 - 15) / 2;
+        x = -(78 + 15) - 100;
 
         idx = id;
 
@@ -82,6 +84,10 @@ class ShopItemEntity extends Entity<ClickerGame> {
         inter.onClick = x -> {
             if (purchaseable()) {
                 onClick();
+                if (Key.isDown(Key.SHIFT)) {
+                    while (purchaseable())
+                        onClick();
+                }
                 cd.setS("bought", 1);
                 cd.reset("nocash");
                 rbs = 0.8;

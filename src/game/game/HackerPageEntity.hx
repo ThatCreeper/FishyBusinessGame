@@ -1,5 +1,8 @@
 package game.game;
 
+import hl.F64;
+import haxe.Int64;
+import haxe.Int64Helper;
 import h2d.Tile;
 import h2d.Bitmap;
 import hxd.res.DefaultFont;
@@ -70,7 +73,7 @@ class HackerPageEntity extends Entity<ClickerGame> {
             game.hackerProg = 0;
             text.text += confirmed;
             game.hackerPts++;
-            game.cash = Math.floor(game.cash * 1.2);
+            game.cash = Math.ffloor(game.cash * 1.2);
             if (game.cash > game.mostcash)
                 game.mostcash = game.cash;
             game.luigi();

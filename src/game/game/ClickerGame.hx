@@ -33,7 +33,7 @@ class ClickerGame extends Game {
     var cashAnimTime = 0.0;
     var cashEndAnimScale = 0.0;
     function get_cashWid() {
-        return cashNode.textWidth * cashNode.scaleX;
+        return cashNode.textWidth;
     }
 
     function get_cashHei() {
@@ -42,14 +42,14 @@ class ClickerGame extends Game {
 
     // State
     public var page = Page.Typing;
-    public var cash = 0;
-    public var totalcash = 0;
-    public var mostcash = 0;
+    public var cash = 0.0;
+    public var totalcash = 0.0;
+    public var mostcash = 0.0;
     public var luigiprob = 0.0;
     public var totalletters = 0;
     public var letters = 0;
     public var lettersToPost = 30;
-    public var cashPerEmail = 1;
+    public var cashPerEmail = 1.0;
     public var hackerProg = 0.0;
     public var hackerPts = 0;
     public var types: Typer = null;
@@ -62,6 +62,7 @@ class ClickerGame extends Game {
         camera.centered = false;
 
         cashNode = new Text(DefaultFont.get());
+        cashNode.text = "$0";
 
         bg = new BackgroundEntity(this);
         sidebar = new SidebarEntity(this);
@@ -84,18 +85,20 @@ class ClickerGame extends Game {
             }
         }
 
-        if (types != null) {
+        var ctrl = Key.isDown(Key.CTRL);
+
+        if (!ctrl && types != null) {
             types.timeuntil -= Timer.dt;
             if (types.timeuntil <= 0) {
+                cash += types.cash * Math.ffloor((types.resettime - types.timeuntil) / types.resettime);
                 types.timeuntil = types.resettime;
-                cash += types.cash;
             }
         }
-        if (ilust != null) {
+        if (!ctrl && ilust != null) {
             ilust.timeuntil -= Timer.dt;
             if (ilust.timeuntil <= 0) {
+                cash += ilust.cash * Math.ffloor((ilust.resettime - ilust.timeuntil) / ilust.resettime);
                 ilust.timeuntil = ilust.resettime;
-                cash += ilust.cash;
             }
         }
 
@@ -152,17 +155,22 @@ class ClickerGame extends Game {
 
     public function moveCash(x, y, col, sz) {
         cashNode.textColor = col;
-        if (cashEndAnimX == x &&
-            cashEndAnimY == y &&
-            cashEndAnimScale == sz)
-            return;
+        // if (cashEndAnimX == x &&
+        //     cashEndAnimY == y &&
+        //     cashEndAnimScale == sz)
+        //     return;
         cashEndAnimX = x;
         cashEndAnimY = y;
         cashEndAnimScale = sz;
-        if (initCashNode || cashAnimTime > 0.5) {
-            cashAnimTime = initCashNode ? 10_000 : 0;
-            cashStartAnimX = cashNode.x;
-            cashStartAnimY = cashNode.y;
+        // if (initCashNode || cashAnimTime > 0.5) {
+        //     cashAnimTime = initCashNode ? 10_000 : 0;
+        //     cashStartAnimX = cashNode.x;
+        //     cashStartAnimY = cashNode.y;
+        // }
+        if (initCashNode) {
+            cashNode.x = x;
+            cashNode.y = y;
+            cashNode.scaleX = cashNode.scaleY = sz;
         }
         initCashNode = false;
     }
@@ -175,11 +183,13 @@ class ClickerGame extends Game {
     }
 
     function updateCash() {
-        cashAnimTime += deltaTime;
-        cashAnimTime = Math.min(cashAnimTime, 0.5);
-        var eased = easeOutBack(cashAnimTime / 0.5);
-        cashNode.x = M.lerp(cashStartAnimX, cashEndAnimX, eased);
-        cashNode.y = M.lerp(cashStartAnimY, cashEndAnimY, eased);
+        // cashAnimTime += deltaTime;
+        // cashAnimTime = Math.min(cashAnimTime, 0.5);
+        // var eased = easeOutBack(cashAnimTime / 0.5);
+        // cashNode.x = M.lerp(cashStartAnimX, cashEndAnimX, eased);
+        // cashNode.y = M.lerp(cashStartAnimY, cashEndAnimY, eased);
+        cashNode.x = M.lerp(cashNode.x, cashEndAnimX, 0.3 * tmod);
+        cashNode.y = M.lerp(cashNode.y, cashEndAnimY, 0.3 * tmod);
         cashNode.scaleX = cashNode.scaleY = M.lerp(cashNode.scaleX, cashEndAnimScale, 0.2 * tmod);
     }
 }
