@@ -1,6 +1,7 @@
 package game;
 
-import game.game.ClickerGame;
+import hxd.Cursor;
+import game.game.MindWaveGame;
 import hxd.Pad;
 import h2d.Scene;
 
@@ -41,7 +42,7 @@ class Main extends hxd.App {
 
         ucd = new Cooldown();
         
-        setGame(new ClickerGame());
+        setGame(new MindWaveGame());
         newGameThisFrame = false;
     }
 

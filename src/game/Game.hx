@@ -72,4 +72,9 @@ class Game extends TimeAware {
     public function shake(s) {
         cd.setS("shake", s);
     }
+
+    public function clear() {
+        for (e in entities) e.dispose();
+        entities.clear();
+    }
 }

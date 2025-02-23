@@ -9,7 +9,7 @@ class Entity<T: Game = Game> extends TimeAware {
     public var y: Float = 0;
     public var scale: Float = 1;
     public var rotation: Float = 0;
-    public var pixelRounding = false;
+    public var pixelRounding = true;
 
     public var camera(get, never): Camera;
         function get_camera() {
@@ -78,8 +78,13 @@ class Entity<T: Game = Game> extends TimeAware {
             return;
         disposed = true;
         for (e in attached)
-            e.dispose();
+            e.remove();
         spr.remove();
+        onDispose();
+    }
+
+    public function onDispose() {
+
     }
 
     public function shake(s) {
